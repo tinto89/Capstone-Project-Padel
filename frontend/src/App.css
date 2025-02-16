@@ -1,0 +1,42 @@
+.background-image {
+  background-image: url("../public/background-image.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.app-logo {
+  width: 200px;
+  border-radius: 25%;
+}
+
+.app-logo-mini {
+  width: 50%;
+  border-radius: 25%;
+}
+
+.clickable-card {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.clickable-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.stato-indicatore {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.stato-indicatore.verde {
+  background-color: green;
+}
+
+.stato-indicatore.rosso {
+  background-color: red;
+}

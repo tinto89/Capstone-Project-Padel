@@ -1,21 +1,33 @@
-import React from "react";
-import { SignInButton } from "@clerk/clerk-react";
+import React, { useEffect } from "react";
+import { SignedOut, SignIn, useUser } from "@clerk/clerk-react";
+import { Container, Row, Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const { isSignedIn } = useUser();
+
+  useEffect(() => {
+    if (isSignedIn) {
+      navigate("/dashboard");
+    }
+  }, [isSignedIn, navigate]);
+
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card shadow p-4" style={{ width: "400px" }}>
-        <div className="text-center mb-4">
-          <img
-            src="/icon_logo.ico"
-            alt="Padel Manager Logo"
-            style={{ width: "100px", marginBottom: "15px" }}
-          />
-          <h3>Accedi a Padel Manager</h3>
-        </div>
-        <SignInButton />
-      </div>
-    </div>
+    <Container
+      fluid
+      className="vh-100 d-flex flex-column align-items-center justify-content-center background-image"
+    >
+      <h1 className="fw-bold my-4">L'app per il tuo centro padel</h1>
+      <Image src="/icon_logo.ico" className="app-logo" alt="logo" />
+
+      <Row className="mt-4">
+        <SignedOut>
+          <SignIn />
+        </SignedOut>
+      </Row>
+    </Container>
   );
 }
