@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import "../App.css";
 import { Container, Col, Row, Button, Image, Navbar } from "react-bootstrap";
 import Dashboard from "../components/Dashboard";
 import CampiGestiti from "../components/CampiGestiti";
 import UtentiRegistrati from "../components/UtentiRegistrati";
 import { UserButton } from "@clerk/clerk-react";
+import "../App.css";
 
-export default function HomePage({ partitaInCorso, setPartitaInCorso }) {
+export default function HomePage() {
   const [activePage, setActivePage] = useState("dashboard");
+  const [partitaInCorso, setPartitaInCorso] = useState(null);
 
   // Funzione per cambiare la pagina
   const changePage = (page) => {
@@ -30,25 +31,26 @@ export default function HomePage({ partitaInCorso, setPartitaInCorso }) {
   return (
     <Row className="vh-100 m-0">
       {/* Sidebar */}
-      <Col
-        xs={2}
-        className="vh-100 bg-dark text-light p-3 d-flex flex-column align-items-start"
-      >
-        <Image src="/icon_logo.ico" alt="Logo" className="app-logo-mini mb-4" />
+      <Col xs={2} className="vh-100 bg-dark text-light p-3 d-flex flex-column">
+        <Image
+          src="/icon_logo.ico"
+          alt="Logo"
+          className="app-logo-mini my-4 mx-auto"
+        />
         <Button
-          className="nav-link text-light"
+          className="nav-link text-outline fs-3 mb-3 btn-warning"
           onClick={() => changePage("dashboard")}
         >
           Dashboard
         </Button>
         <Button
-          className="nav-link text-light"
+          className="nav-link text-outline fs-3 mb-3 btn-warning"
           onClick={() => changePage("campiGestiti")}
         >
           Campi Gestiti
         </Button>
         <Button
-          className="nav-link text-light"
+          className="nav-link text-outline fs-3 mb-3 btn-warning"
           onClick={() => changePage("utentiRegistrati")}
         >
           Utenti Registrati
