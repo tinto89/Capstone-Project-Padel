@@ -62,9 +62,7 @@ export default function HomePage({ partitaInCorso, setPartitaInCorso }) {
           variant="dark"
           className="w-100 justify-content-end px-3"
         >
-          <Navbar.Brand className="text-light">
-            Account: Padel Verona
-          </Navbar.Brand>
+          <Navbar.Brand className="text-light">Account:</Navbar.Brand>
           <UserButton afterSignOutRedirectUrl="/" />
         </Navbar>
 
