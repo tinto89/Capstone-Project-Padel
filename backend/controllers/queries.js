@@ -12,11 +12,41 @@ const getAllFields = async (req, res, next) => {
   }
 };
 
+const getField = async (req, res, next) => {
+  try {
+    const returnField = await Fields.findById(req.params.id);
+    res.json(returnField);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 const getAllUsers = async (req, res, next) => {
   try {
     const returnAll = await Users.find();
 
     res.json(returnAll);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const addUser = async (req, res, next) => {
+  try {
+    const user = await Users.create(req.body);
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await Users.findByIdAndDelete(req.params.id);
+    res.json(user);
   } catch (error) {
     console.log(error);
     next(error);
@@ -34,4 +64,11 @@ const updateField = async (req, res, next) => {
   }
 };
 
-export { getAllFields, getAllUsers, updateField };
+export {
+  getAllFields,
+  getField,
+  addUser,
+  deleteUser,
+  getAllUsers,
+  updateField,
+};

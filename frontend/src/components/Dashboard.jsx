@@ -9,7 +9,7 @@ export default function Dashboard({ changePage }) {
       <Row className="w-100 mt-4">
         <Col md={6} className="mb-4">
           <Card
-            className="clickable-card"
+            className="clickable-card btn"
             onClick={() => changePage("campiGestiti")}
           >
             <Card.Body>
@@ -21,7 +21,7 @@ export default function Dashboard({ changePage }) {
 
         <Col md={6} className="mb-4">
           <Card
-            className="clickable-card"
+            className="clickable-card btn"
             onClick={() => changePage("utentiRegistrati")}
           >
             <Card.Body>

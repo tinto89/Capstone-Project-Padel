@@ -12,12 +12,13 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
   const [tieBreak, setTieBreak] = useState(false);
   const [winner, setWinner] = useState(null);
   const [serving, setServing] = useState("A");
-
   const scoreSteps = [0, 15, 30, 40];
+
+  const API_FIELDS_URL = process.env.REACT_APP_API_FIELDS_URL;
 
   const updateGameInDatabase = async (newData) => {
     try {
-      await fetch(`http://localhost:3001/api/fields/${campo._id}`, {
+      await fetch(`${API_FIELDS_URL}/${campo._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -165,6 +166,7 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
     setSetsB(0);
     setAdvantage(null);
     setWinner(null);
+    setServing("A");
     updateGameInDatabase({
       scoreA: 0,
       scoreB: 0,
@@ -192,11 +194,11 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
   };
 
   return (
-    <div className="text-center">
-      <h2>{campo.nome} - Partita</h2>
+    <div className="text-center match-container">
+      <h2>{campo.nome} - Partita in corso</h2>
 
       {winner && (
-        <Alert variant="success" className="mt-3">
+        <Alert variant="success" className="mt-3 w-50 mx-auto text-center">
           {`🎉 Vittoria! ${
             winner === "A" ? "Team A" : "Team B"
           } ha vinto la partita! 🎉`}
@@ -204,7 +206,7 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
       )}
 
       {!winner && (
-        <Alert variant="info" className="mt-3">
+        <Alert variant="secondary" className="mt-3 w-50 mx-auto text-center">
           🎾 Battitore: {serving === "A" ? "Team A" : "Team B"}
         </Alert>
       )}
@@ -212,17 +214,15 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
       <div className="p-4">
         <Row>
           <Col>
-            <h2>Team A</h2>
-            <h3 className="text-outline">{campo.userA1}</h3>
-            <h3 className="text-outline">{campo.userA2}</h3>
+            <h2 className="mb-4 text-danger">Team A</h2>
+            <h3>{campo.userA1}</h3>
+            <h3 className="mb-4">{campo.userA2}</h3>
             {!winner && (
               <>
                 <Button variant="danger" onClick={() => updateScore("A")}>
                   ➕
                 </Button>
-                <h4 className="text-outline">
-                  {advantage === "A" ? "AD" : scoreA}
-                </h4>
+                <h4 className="p-3">{advantage === "A" ? "AD" : scoreA}</h4>
                 <Button
                   variant="danger"
                   onClick={() =>
@@ -238,21 +238,19 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
                 </Button>
               </>
             )}
-            <h4 className="mt-4 text-outline">Set: {setsA ?? 0}</h4>
-            <h4 className="text-outline">Games: {gamesA}</h4>
+            <h4 className="mt-4 ">Set: {setsA ?? 0}</h4>
+            <h4>Games: {gamesA}</h4>
           </Col>
           <Col>
-            <h2>Team B</h2>
-            <h3 className="text-outline">{campo.userB1}</h3>
-            <h3 className="text-outline">{campo.userB2}</h3>
+            <h2 className="mb-4 text-warning">Team B</h2>
+            <h3>{campo.userB1}</h3>
+            <h3 className="mb-4">{campo.userB2}</h3>
             {!winner && (
               <>
                 <Button variant="danger" onClick={() => updateScore("B")}>
                   ➕
                 </Button>
-                <h4 className="text-outline">
-                  {advantage === "B" ? "AD" : scoreB}
-                </h4>
+                <h4 className="p-3">{advantage === "B" ? "AD" : scoreB}</h4>
                 <Button
                   variant="danger"
                   onClick={() =>
@@ -268,8 +266,8 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
                 </Button>
               </>
             )}
-            <h4 className="mt-4 text-outline">Set: {setsB ?? 0}</h4>
-            <h4 className="text-outline">Games: {gamesB}</h4>
+            <h4 className="mt-4">Set: {setsB ?? 0}</h4>
+            <h4>Games: {gamesB}</h4>
           </Col>
         </Row>
         <Button className="mt-4 mx-4" variant="danger" onClick={resetMatch}>

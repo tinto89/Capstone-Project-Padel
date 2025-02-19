@@ -1,37 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
 import { Row, Col, Card, Button, Modal } from "react-bootstrap";
 import ChoosedGame from "./ChoosedGame";
+import "../App.css";
 
 export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
-  const API_FIELDS_URL = "http://localhost:3001/api/fields";
   const [show, setShow] = useState(false);
-  const [campoSelezionato, setCampoSelezionato] = useState(null); // Stato per il campo selezionato
-  const [userA1, setUserA1] = useState(""); // Stato per il nome Giocatore A1
-  const [userA2, setUserA2] = useState(""); // Stato per il nome Giocatore A2
-  const [userB1, setUserB1] = useState(""); // Stato per il nome Giocatore B1
-  const [userB2, setUserB2] = useState(""); // Stato per il nome Giocatore B2
-  const handleClose = () => setShow(false);
-  const handleShow = (campo) => {
-    setCampoSelezionato(campo); // Imposta il campo selezionato
-    setUserA1(""); // Reset dei valori precedenti
-    setUserA2("");
-    setUserB1("");
-    setUserB2("");
-    setShow(true); // Mostra il modal
-  };
+  const [campoSelezionato, setCampoSelezionato] = useState(null);
+  const [users, setUsers] = useState([]); // Stato per gli utenti registrati
+  const [userA1, setUserA1] = useState("");
+  const [userA2, setUserA2] = useState("");
+  const [userB1, setUserB1] = useState("");
+  const [userB2, setUserB2] = useState("");
   const [campi, setCampi] = useState([]);
 
+  const API_FIELDS_URL = process.env.REACT_APP_API_FIELDS_URL;
+  const API_USERS_URL = process.env.REACT_APP_API_USERS_URL;
+
+  // Fetch dei campi disponibili
   const getFields = async () => {
     try {
-      const response = await fetch(API_FIELDS_URL, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Errore nel recuperare i campi");
-      }
+      const response = await fetch(API_FIELDS_URL);
+      if (!response.ok) throw new Error("Errore nel recuperare i campi");
       const data = await response.json();
       setCampi(data);
     } catch (error) {
@@ -39,9 +28,70 @@ export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
     }
   };
 
+  // Fetch degli utenti registrati
+  const getUsers = async () => {
+    try {
+      const response = await fetch(API_USERS_URL);
+      if (!response.ok) throw new Error("Errore nel recuperare gli utenti");
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getFields();
+    getUsers();
   }, [partitaInCorso]);
+
+  const handleShow = (campo) => {
+    setCampoSelezionato(campo);
+    setUserA1("");
+    setUserA2("");
+    setUserB1("");
+    setUserB2("");
+    setShow(true);
+  };
+
+  const handleClose = () => setShow(false);
+
+  // Avvia la partita aggiornando il campo
+  const handleSubmit = async () => {
+    if (campoSelezionato) {
+      const updatedCampo = {
+        ...campoSelezionato,
+        userA1,
+        userA2,
+        userB1,
+        userB2,
+        stato: "rosso", // Imposta il campo come "occupato"
+      };
+
+      try {
+        const response = await fetch(
+          `${API_FIELDS_URL}/${campoSelezionato._id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedCampo),
+          }
+        );
+
+        if (!response.ok) throw new Error("Errore nell'aggiornare il campo");
+
+        const data = await response.json();
+        setCampi((prevCampi) =>
+          prevCampi.map((campo) => (campo._id === data._id ? data : campo))
+        );
+
+        setPartitaInCorso(updatedCampo);
+        handleClose();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   // Se è attiva una partita, mostra il componente ChoosedGame
   if (partitaInCorso) {
@@ -54,103 +104,62 @@ export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
     );
   }
 
-  // Funzione per inviare i dati e aggiornare il campo
-  const handleSubmit = async () => {
-    if (campoSelezionato) {
-      const updatedCampo = {
-        ...campoSelezionato,
-        userA1,
-        userA2,
-        userB1,
-        userB2,
-        stato: "rosso", // Modifica stato a "rosso"
-      };
-
-      try {
-        const response = await fetch(
-          `${API_FIELDS_URL}/${campoSelezionato._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedCampo), // Invia i dati aggiornati
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Errore nell'aggiornare il campo");
-        }
-
-        const data = await response.json();
-        // Aggiorna la lista dei campi
-        setCampi((prevCampi) =>
-          prevCampi.map((campo) => (campo._id === data._id ? data : campo))
-        );
-
-        setPartitaInCorso(updatedCampo); // Imposta la partita in corso
-        handleClose(); // Chiudi il modal
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
   return (
     <>
-      {/* Modal */}
+      {/* Modal per selezionare i giocatori */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Nuova Partita</Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex flex-column">
           <label>A1</label>
-          <input
-            name="A1"
-            value={userA1}
-            onChange={(e) => setUserA1(e.target.value)} // Gestisci il cambiamento di valore
-            type="text"
-            placeholder="Nome Giocatore A1"
-          />
+          <select value={userA1} onChange={(e) => setUserA1(e.target.value)}>
+            <option value="">Seleziona Giocatore A1</option>
+            {users.map((user) => (
+              <option key={user._id} value={user.nome}>
+                {user.nome} {user.cognome}
+              </option>
+            ))}
+          </select>
 
           <label>A2</label>
-          <input
-            name="A2"
-            value={userA2}
-            onChange={(e) => setUserA2(e.target.value)} // Gestisci il cambiamento di valore
-            type="text"
-            placeholder="Nome Giocatore A2"
-          />
+          <select value={userA2} onChange={(e) => setUserA2(e.target.value)}>
+            <option value="">Seleziona Giocatore A2</option>
+            {users.map((user) => (
+              <option key={user._id} value={user.nome}>
+                {user.nome} {user.cognome}
+              </option>
+            ))}
+          </select>
 
           <label>B1</label>
-          <input
-            name="B1"
-            value={userB1}
-            onChange={(e) => setUserB1(e.target.value)} // Gestisci il cambiamento di valore
-            type="text"
-            placeholder="Nome Giocatore B1"
-          />
+          <select value={userB1} onChange={(e) => setUserB1(e.target.value)}>
+            <option value="">Seleziona Giocatore B1</option>
+            {users.map((user) => (
+              <option key={user._id} value={user.nome}>
+                {user.nome} {user.cognome}
+              </option>
+            ))}
+          </select>
 
           <label>B2</label>
-          <input
-            name="B2"
-            value={userB2}
-            onChange={(e) => setUserB2(e.target.value)} // Gestisci il cambiamento di valore
-            type="text"
-            placeholder="Nome Giocatore B2"
-          />
+          <select value={userB2} onChange={(e) => setUserB2(e.target.value)}>
+            <option value="">Seleziona Giocatore B2</option>
+            {users.map((user) => (
+              <option key={user._id} value={user.nome}>
+                {user.nome} {user.cognome}
+              </option>
+            ))}
+          </select>
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            type="submit"
-            variant="warning"
-            onClick={handleSubmit} // Gestisci il submit
-          >
+          <Button variant="warning" onClick={handleSubmit}>
             Avvia
           </Button>
         </Modal.Footer>
       </Modal>
 
+      {/* Lista Campi */}
       <h2>Campi Gestiti</h2>
       <Row className="w-100 d-flex justify-content-center mt-4">
         {campi.map((campo) => (
@@ -168,7 +177,7 @@ export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
                       variant="warning"
                       className="w-100"
                       disabled={campo.stato !== "verde"}
-                      onClick={() => handleShow(campo)} // Passa il campo selezionato al modal
+                      onClick={() => handleShow(campo)}
                     >
                       Nuova Partita
                     </Button>
