@@ -7,11 +7,16 @@ import "../App.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
+  const { user, isSignedIn } = useUser();
 
   useEffect(() => {
-    if (isSignedIn) {
+    if (isSignedIn && user?.publicMetadata?.database) {
       navigate("/dashboard");
+    } else {
+      alert(
+        "Account non presente nel database, chiedi all'admin di registrarlo"
+      );
+      navigate("/");
     }
   }, [isSignedIn, navigate]);
 
