@@ -1,4 +1,4 @@
-import Fields from "../models/FieldsSchema.js";
+import Fields from "../models/fieldsSchema.js";
 import Users from "../models/usersSchema.js";
 
 const getAllFields = async (req, res, next) => {
