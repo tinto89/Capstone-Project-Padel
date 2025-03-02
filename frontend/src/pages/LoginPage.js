@@ -10,7 +10,7 @@ export default function LoginPage() {
   const { user, isSignedIn } = useUser();
 
   useEffect(() => {
-    if (isSignedIn && user?.publicMetadata?.database) {
+    if (isSignedIn && user.publicMetadata.database) {
       navigate("/dashboard");
     } else {
       alert(
