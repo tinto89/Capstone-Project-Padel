@@ -24,5 +24,5 @@ server.post("/api/db", async (req, res) => {
 server.use("/api", router);
 
 server.listen(3001, () => {
-  console.log("Server running on http://localhost:3001");
+  console.log("Server running on Render");
 });
