@@ -7,13 +7,16 @@ import "../App.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
-    if (isSignedIn) {
+    if (user?.publicMetadata?.database) {
       navigate("/dashboard");
+    } else {
+      alert("Account non abilitato, contattare l'admin");
+      navigate("/");
     }
-  }, [isSignedIn, navigate]);
+  }, [user, navigate]);
 
   return (
     <Container

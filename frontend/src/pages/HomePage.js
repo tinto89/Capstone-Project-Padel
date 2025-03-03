@@ -45,10 +45,6 @@ export default function HomePage() {
 
   const sendDbName = async (dbName) => {
     try {
-      if (!dbName) {
-        alert("Account non abilitato, contattare l'amministratore");
-        navigate("/");
-      }
       const response = await fetch(API_DB_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
