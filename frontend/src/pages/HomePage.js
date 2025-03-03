@@ -5,10 +5,12 @@ import CampiGestiti from "../components/CampiGestiti";
 import UtentiRegistrati from "../components/UtentiRegistrati";
 import { UserButton, useUser } from "@clerk/clerk-react";
 import "../App.css";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [activePage, setActivePage] = useState("dashboard");
   const [partitaInCorso, setPartitaInCorso] = useState(null);
+  const navigate = useNavigate();
 
   // Funzione per cambiare la pagina
   const changePage = (page) => {
@@ -38,6 +40,9 @@ export default function HomePage() {
     if (isSignedIn && user?.publicMetadata?.database) {
       sendDbName(user.publicMetadata.database);
       setNome(user.publicMetadata.nome);
+    } else {
+      alert("Account non abilitato, contattare l'amministratore");
+      navigate("/");
     }
   }, [isSignedIn, user]);
 
