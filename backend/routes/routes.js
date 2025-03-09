@@ -4,12 +4,14 @@ import {
   deleteUser,
   getAllFields,
   getAllUsers,
+  getDbName,
   getField,
   updateField,
 } from "../controllers/queries.js";
 
 const router = express.Router();
 
+router.post("/db", getDbName);
 router.get("/users", getAllUsers);
 router.get("/fields", getAllFields);
 router.get("/fields/:id", getField);

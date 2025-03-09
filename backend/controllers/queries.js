@@ -1,5 +1,16 @@
 import Fields from "../models/fieldsSchema.js";
 import Users from "../models/usersSchema.js";
+import dbConnection from "./dbConnection.js";
+
+const getDbName = async (req, res, next) => {
+  const { dbName } = req.body;
+  try {
+    await dbConnection(dbName);
+  } catch (error) {
+    console.error("Errore nella connessione al database:", error);
+    next(error);
+  }
+};
 
 const getAllFields = async (req, res, next) => {
   try {
@@ -65,6 +76,7 @@ const updateField = async (req, res, next) => {
 };
 
 export {
+  getDbName,
   getAllFields,
   getField,
   addUser,
