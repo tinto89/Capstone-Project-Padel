@@ -2,18 +2,16 @@ import express from "express";
 import cors from "cors";
 import dbConnection from "./controllers/dbConnection.js";
 import { router } from "./routes/routes.js";
-import pkg from "@vercel/node";
 
-const { createServer } = pkg;
-const app = express();
-app.use(express.json());
-app.use(cors());
+const server = express();
+server.use(express.json());
+server.use(cors());
 
-app.get("/", (req, res) => {
+server.get("/", (req, res) => {
   res.send("PadelManagerBackend on Vercel 🚀");
 });
 
-app.post("/api/db", async (req, res) => {
+server.post("/api/db", async (req, res) => {
   const { dbName } = req.body;
   try {
     await dbConnection(dbName);
@@ -23,6 +21,6 @@ app.post("/api/db", async (req, res) => {
   }
 });
 
-app.use("/api", router);
+server.use("/api", router);
 
-export default createServer(app);
+export default server;
