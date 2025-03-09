@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import dbConnection from "./controllers/dbConnection.js";
 import { router } from "./routes/routes.js";
-import { createServer } from "@vercel/node"; // per la backend serverless su Vercel
+import pkg from "@vercel/node";
 
+const { createServer } = pkg;
 const app = express();
 app.use(express.json());
 app.use(cors());
