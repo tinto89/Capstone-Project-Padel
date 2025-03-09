@@ -12,6 +12,7 @@ server.get("/", (req, res) => {
 });
 
 server.post("/api/db", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const { dbName } = await req.body;
   try {
     await dbConnection(dbName);
