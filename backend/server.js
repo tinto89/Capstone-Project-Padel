@@ -9,6 +9,9 @@ server.use(cors());
 server.get("/", (req, res) => {
   res.send("PadelManagerBackend on Vercel 🚀");
 });
+server.get("/api/db", (req, res) => {
+  res.send("PadelManagerBackend Database Connection... 🚀");
+});
 server.use("/api", router);
 
 export default server;
