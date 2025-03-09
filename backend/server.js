@@ -12,7 +12,7 @@ server.get("/", (req, res) => {
 });
 
 server.post("/api/db", async (req, res) => {
-  const { dbName } = req.body;
+  const { dbName } = await req.body;
   try {
     await dbConnection(dbName);
   } catch (error) {
