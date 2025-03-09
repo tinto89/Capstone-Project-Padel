@@ -25,9 +25,7 @@ Condivisione della partita in atto (es. su uno schermo posto a bordo campo)
 
 ## 🌍 Deployment
 
-Frontend: Vercel
-
-Backend: Render
+Frontend & Backend: Vercel
 
 L'applicazione è attualmente online: [Padel Manager](https://padelmanager.vercel.app/)
 
