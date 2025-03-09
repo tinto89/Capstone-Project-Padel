@@ -5,13 +5,10 @@ import dbConnection from "./dbConnection.js";
 const getDbName = async (req, res, next) => {
   const { dbName } = req.body;
   try {
-    console.log("Ricevuta la richiesta POST per la connessione al database");
     await dbConnection(dbName);
-    console.log("Connessione al database riuscita");
-    res.status(200).send("Connessione al database riuscita");
+    res.send("Connessioni al database riuscita!");
   } catch (error) {
-    console.error("Errore nella connessione al database:", error);
-    res.status(500).send({ error: "Errore nella connessione al database" });
+    console.log(error);
     next(error);
   }
 };
