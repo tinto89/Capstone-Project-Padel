@@ -6,15 +6,15 @@ import "../App.css";
 export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
   const [show, setShow] = useState(false);
   const [campoSelezionato, setCampoSelezionato] = useState(null);
-  const [users, setUsers] = useState([]); // Stato per gli utenti registrati
+  const [users, setUsers] = useState([]);
   const [userA1, setUserA1] = useState("");
   const [userA2, setUserA2] = useState("");
   const [userB1, setUserB1] = useState("");
   const [userB2, setUserB2] = useState("");
   const [campi, setCampi] = useState([]);
 
-  const API_FIELDS_URL = process.env.REACT_APP_API_FIELDS_URL;
-  const API_USERS_URL = process.env.REACT_APP_API_USERS_URL;
+  const API_FIELDS_URL = process.env.REACT_APP_API_URL + "/fields";
+  const API_USERS_URL = process.env.REACT_APP_API_URL + "/users";
 
   // Fetch dei campi disponibili
   const getFields = async () => {
@@ -98,6 +98,7 @@ export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
     return (
       <ChoosedGame
         campo={partitaInCorso}
+        apiFieldsUrl={API_FIELDS_URL}
         setPartitaInCorso={setPartitaInCorso}
         getFields={getFields}
       />

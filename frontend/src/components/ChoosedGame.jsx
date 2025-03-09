@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Button, Row, Col, Alert } from "react-bootstrap";
 
-export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
+export default function ChoosedGame({
+  campo,
+  apiFieldsUrl,
+  setPartitaInCorso,
+  getFields,
+}) {
   const [scoreA, setScoreA] = useState(campo.scoreA);
   const [scoreB, setScoreB] = useState(campo.scoreB);
   const [advantage, setAdvantage] = useState(campo.advantage);
@@ -14,11 +19,9 @@ export default function ChoosedGame({ campo, setPartitaInCorso, getFields }) {
   const [serving, setServing] = useState("A");
   const scoreSteps = [0, 15, 30, 40];
 
-  const API_FIELDS_URL = process.env.REACT_APP_API_FIELDS_URL;
-
   const updateGameInDatabase = async (newData) => {
     try {
-      await fetch(`${API_FIELDS_URL}/${campo._id}`, {
+      await fetch(`${apiFieldsUrl}/${campo._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

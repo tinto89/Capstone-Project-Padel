@@ -10,7 +10,7 @@ export default function UtentiRegistrati() {
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState(null);
 
-  const API_USERS_URL = process.env.REACT_APP_API_USERS_URL;
+  const API_USERS_URL = process.env.REACT_APP_API_URL + "/users";
 
   useEffect(() => {
     fetchUtenti();
@@ -50,7 +50,7 @@ export default function UtentiRegistrati() {
       }
 
       const newUserData = await response.json();
-      setUtenti([...utenti, newUserData]); // Aggiorna la lista
+      setUtenti([...utenti, newUserData]);
       setShowModal(false);
       setNewUser({ nome: "", cognome: "", email: "" });
     } catch (err) {
@@ -68,7 +68,7 @@ export default function UtentiRegistrati() {
       }?`
     );
 
-    // Se l'utente ha confermato, procedi con la cancellazione
+    // Se l'utente conferma, elimina l'utente
     if (isConfirmed) {
       try {
         const response = await fetch(`${API_USERS_URL}/${utente._id}`, {
@@ -77,7 +77,7 @@ export default function UtentiRegistrati() {
         if (!response.ok) {
           throw new Error("Errore nell'eliminazione dell'utente");
         }
-        fetchUtenti(); // Aggiorna la lista degli utenti
+        fetchUtenti();
       } catch (err) {
         setError(err.message);
       }

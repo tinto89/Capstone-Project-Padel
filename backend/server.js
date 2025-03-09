@@ -2,16 +2,17 @@ import express from "express";
 import cors from "cors";
 import dbConnection from "./controllers/dbConnection.js";
 import { router } from "./routes/routes.js";
+import { createServer } from "@vercel/node"; // per la backend serverless su Vercel
 
-const server = express();
-server.use(express.json());
-server.use(cors());
+const app = express();
+app.use(express.json());
+app.use(cors());
 
-server.get("/", (req, res) => {
-  res.send("PadelManagerBackend");
+app.get("/", (req, res) => {
+  res.send("PadelManagerBackend on Vercel 🚀");
 });
 
-server.post("/api/db", async (req, res) => {
+app.post("/api/db", async (req, res) => {
   const { dbName } = req.body;
   try {
     await dbConnection(dbName);
@@ -21,8 +22,6 @@ server.post("/api/db", async (req, res) => {
   }
 });
 
-server.use("/api", router);
+app.use("/api", router);
 
-server.listen(3001, () => {
-  console.log("Server running on Render");
-});
+export default createServer(app);

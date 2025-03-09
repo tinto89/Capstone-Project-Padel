@@ -5,12 +5,10 @@ import CampiGestiti from "../components/CampiGestiti";
 import UtentiRegistrati from "../components/UtentiRegistrati";
 import { UserButton, useUser } from "@clerk/clerk-react";
 import "../App.css";
-import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [activePage, setActivePage] = useState("dashboard");
   const [partitaInCorso, setPartitaInCorso] = useState(null);
-  const navigate = useNavigate();
 
   // Funzione per cambiare la pagina
   const changePage = (page) => {
@@ -30,7 +28,7 @@ export default function HomePage() {
     utentiRegistrati: <UtentiRegistrati />,
   };
 
-  const API_DB_URL = process.env.REACT_APP_API_DB_URL;
+  const API_DB_URL = process.env.REACT_APP_API_URL + "/db";
 
   const { user, isSignedIn } = useUser(); // Verifica che l'utente sia autenticato
   const [nome, setNome] = useState(null);
