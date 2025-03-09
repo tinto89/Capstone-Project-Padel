@@ -7,7 +7,7 @@ export default function SharingField() {
   const { id } = useParams();
   const [campo, setCampo] = useState([]);
 
-  const API_FIELDS_URL = process.env.REACT_APP_API_FIELDS_URL;
+  const API_FIELDS_URL = process.env.REACT_APP_API_URL + "/fields";
 
   // Funzione per fetch dei dati del campo
   const fetchCampo = async () => {
