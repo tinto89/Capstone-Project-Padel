@@ -12,6 +12,7 @@ server.get("/", (req, res) => {
 });
 
 server.post("/api/db", async (req, res) => {
+  console.log("Avviata la connessione al database");
   const { dbName } = req.body;
   try {
     await dbConnection(dbName);
