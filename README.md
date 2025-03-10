@@ -31,7 +31,7 @@ L'applicazione è attualmente online: [Padel Manager](https://padelmanager.verce
 
 Per chi volesse provarla:
 
-email: padelverona (4 campi) o padelmilano (6 campi) @gmail.com
+email: padelmilano@gmail.com
 
 password: 00000000
 
