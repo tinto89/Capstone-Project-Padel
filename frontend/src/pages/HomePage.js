@@ -28,7 +28,7 @@ export default function HomePage() {
     utentiRegistrati: <UtentiRegistrati />,
   };
 
-  const API_DB_URL = process.env.REACT_APP_API_URL + "/db";
+  // const API_DB_URL = process.env.REACT_APP_API_URL + "/db";
 
   const { user, isSignedIn } = useUser(); // Verifica che l'utente sia autenticato
   const [nome, setNome] = useState(null);
@@ -36,12 +36,12 @@ export default function HomePage() {
   useEffect(() => {
     // Aggiorna il dbName solo se l'utente è autenticato
     if (isSignedIn && user?.publicMetadata?.database) {
-      sendDbName(user.publicMetadata.database);
+      // sendDbName(user.publicMetadata.database);
       setNome(user.publicMetadata.nome);
     }
   }, [isSignedIn, user]);
 
-  const sendDbName = async (dbName) => {
+  /*  const sendDbName = async (dbName) => {
     try {
       const response = await fetch(API_DB_URL, {
         method: "POST",
@@ -56,7 +56,7 @@ export default function HomePage() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }; */
 
   return (
     <Row className="vh-100 m-0">

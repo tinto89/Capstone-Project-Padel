@@ -1,8 +1,8 @@
 import Fields from "../models/fieldsSchema.js";
 import Users from "../models/usersSchema.js";
-import dbConnection from "./dbConnection.js";
+// import dbConnection from "./dbConnection.js";
 
-const getDbName = async (req, res, next) => {
+/* const getDbName = async (req, res, next) => {
   const { dbName } = req.body;
   try {
     await dbConnection(dbName);
@@ -11,7 +11,7 @@ const getDbName = async (req, res, next) => {
     console.log(error);
     next(error);
   }
-};
+}; */
 
 const getAllFields = async (req, res, next) => {
   try {
