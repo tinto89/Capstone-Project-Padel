@@ -77,7 +77,7 @@ const updateField = async (req, res, next) => {
 };
 
 export {
-  getDbName,
+  // getDbName,
   getAllFields,
   getField,
   addUser,
