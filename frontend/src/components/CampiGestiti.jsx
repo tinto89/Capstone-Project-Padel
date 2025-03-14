@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Button, Modal } from "react-bootstrap";
+import { Row, Col, Card, Button, Modal, Spinner, Alert } from "react-bootstrap";
 import ChoosedGame from "./ChoosedGame";
 import "../App.css";
 
@@ -12,19 +12,24 @@ export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
   const [userB1, setUserB1] = useState("");
   const [userB2, setUserB2] = useState("");
   const [campi, setCampi] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const API_FIELDS_URL = process.env.REACT_APP_API_URL + "/fields";
   const API_USERS_URL = process.env.REACT_APP_API_URL + "/users";
 
   // Fetch dei campi disponibili
   const getFields = async () => {
+    setLoading(true);
     try {
       const response = await fetch(API_FIELDS_URL);
       if (!response.ok) throw new Error("Errore nel recuperare i campi");
       const data = await response.json();
       setCampi(data);
     } catch (error) {
-      console.error(error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -162,53 +167,58 @@ export default function CampiGestiti({ partitaInCorso, setPartitaInCorso }) {
 
       {/* Lista Campi */}
       <h2>Campi Gestiti</h2>
-      <Row className="w-100 d-flex justify-content-center mt-4">
-        {campi.map((campo) => (
-          <Col md={5} className="mb-4" key={campo._id}>
-            <Card className="p-3 shadow-sm clickable-card">
-              <Card.Body className="text-center position-relative">
-                <h5 className="fw-bold">{campo.nome}</h5>
-                <p className="fw-bold">
-                  {campo.stato === "verde" ? "Disponibile" : "Occupato"}
-                </p>
-                <div className={`stato-indicatore ${campo.stato}`} />
-                <Row className="mt-3">
-                  <Col>
-                    <Button
-                      variant="warning"
-                      className="w-100"
-                      disabled={campo.stato !== "verde"}
-                      onClick={() => handleShow(campo)}
-                    >
-                      Nuova Partita
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      variant="warning"
-                      className="w-100"
-                      disabled={campo.stato !== "rosso"}
-                      onClick={() => setPartitaInCorso(campo)}
-                    >
-                      Vedi Partita
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      variant="warning"
-                      className="w-100"
-                      disabled={campo.stato !== "rosso"}
-                      onClick={() => window.open(`/${campo._id}`, "_blank")}
-                    >
-                      Condividi
-                    </Button>
-                  </Col>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+
+      {loading && <Spinner animation="border" />}
+      {error && <Alert variant="danger">{error}</Alert>}
+      {!loading && !error && (
+        <Row className="w-100 d-flex justify-content-center mt-4">
+          {campi.map((campo) => (
+            <Col md={5} className="mb-4" key={campo._id}>
+              <Card className="p-3 shadow-sm clickable-card">
+                <Card.Body className="text-center position-relative">
+                  <h5 className="fw-bold">{campo.nome}</h5>
+                  <p className="fw-bold">
+                    {campo.stato === "verde" ? "Disponibile" : "Occupato"}
+                  </p>
+                  <div className={`stato-indicatore ${campo.stato}`} />
+                  <Row className="mt-3">
+                    <Col>
+                      <Button
+                        variant="warning"
+                        className="w-100"
+                        disabled={campo.stato !== "verde"}
+                        onClick={() => handleShow(campo)}
+                      >
+                        Nuova Partita
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        variant="warning"
+                        className="w-100"
+                        disabled={campo.stato !== "rosso"}
+                        onClick={() => setPartitaInCorso(campo)}
+                      >
+                        Vedi Partita
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        variant="warning"
+                        className="w-100"
+                        disabled={campo.stato !== "rosso"}
+                        onClick={() => window.open(`/${campo._id}`, "_blank")}
+                      >
+                        Condividi
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
     </>
   );
 }

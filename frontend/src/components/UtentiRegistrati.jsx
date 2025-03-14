@@ -27,8 +27,8 @@ export default function UtentiRegistrati() {
 
       const data = await response.json();
       setUtenti(data);
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -53,8 +53,8 @@ export default function UtentiRegistrati() {
       setUtenti([...utenti, newUserData]);
       setShowModal(false);
       setNewUser({ nome: "", cognome: "", email: "" });
-    } catch (err) {
-      setAddError(err.message);
+    } catch (error) {
+      setAddError(error.message);
     } finally {
       setAdding(false);
     }
@@ -78,8 +78,8 @@ export default function UtentiRegistrati() {
           throw new Error("Errore nell'eliminazione dell'utente");
         }
         fetchUtenti();
-      } catch (err) {
-        setError(err.message);
+      } catch (error) {
+        setError(error.message);
       }
     } else {
       console.log("Eliminazione annullata");
